@@ -16,6 +16,11 @@ spring:
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
 
+api:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+
 logging:
   level:
     root: WARN
