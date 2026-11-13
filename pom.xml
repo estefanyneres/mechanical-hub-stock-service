@@ -50,6 +50,17 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Spring Security (validacao do JWT emitido pelo core-service/repair-service) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+
         <!-- JPA & Database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Trafego interno do cluster (TASK-029): chamado pelo repair-service via
- * DNS interno do Service, nunca exposto pelo API Gateway publico -- por
- * isso sem authorizer/JWT aqui, diferente dos outros servicos.
+ * Chamado pelo repair-service via DNS interno do cluster, e tambem exposto
+ * publicamente pelo API Gateway (igual era /stock/** no monolito) --
+ * exige token com perfil ADMINISTRATOR (ver SecurityConfiguration).
  */
 @Transactional
 @RestController
