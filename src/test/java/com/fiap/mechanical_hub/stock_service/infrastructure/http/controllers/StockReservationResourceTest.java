@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,6 +91,37 @@ class StockReservationResourceTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         verify(useCase).registerStockOut(serviceOrderId, materialId, 3);
+    }
+
+    @Test
+    @DisplayName("Deve registrar entrada de estoque")
+    void registerEntry_ShouldReturnNoContent() {
+        var request = new MaterialQuantityRequest(materialId, 50);
+
+        ResponseEntity<Void> response = resource.registerEntry(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        verify(useCase).registerStockEntry(materialId, 50);
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar entrada de estoque sem materialId")
+    void registerEntry_ShouldThrow_WhenMaterialIdIsNull() {
+        var request = new MaterialQuantityRequest(null, 50);
+
+        assertThatThrownBy(() -> resource.registerEntry(request))
+                .isInstanceOf(IllegalArgumentException.class);
+        verifyNoInteractions(useCase);
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar entrada de estoque com quantidade invalida")
+    void registerEntry_ShouldThrow_WhenQuantityIsZeroOrNull() {
+        assertThatThrownBy(() -> resource.registerEntry(new MaterialQuantityRequest(materialId, 0)))
+                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> resource.registerEntry(new MaterialQuantityRequest(materialId, null)))
+                .isInstanceOf(IllegalArgumentException.class);
+        verifyNoInteractions(useCase);
     }
 
     @Test

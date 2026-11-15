@@ -77,6 +77,28 @@ public class StockReservationResource {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/entry")
+    @Operation(summary = "Registrar entrada de material",
+            description = "Registra a entrada de novos materiais no estoque -- soma a quantidade informada ao " +
+                    "estoque disponível e tenta resolver pendências de reserva em aberto pra esse material, na " +
+                    "ordem em que foram criadas. Mesmo contrato do monolito (POST /stock/entry).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Entrada registrada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "materialId ou quantidade inválidos"),
+            @ApiResponse(responseCode = "404", description = "Estoque não encontrado para o material")
+    })
+    public ResponseEntity<Void> registerEntry(@RequestBody MaterialQuantityRequest request) {
+        if (request.materialId() == null) {
+            throw new IllegalArgumentException("materialId é obrigatório");
+        }
+        if (request.quantity() == null || request.quantity() <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero");
+        }
+
+        useCase.registerStockEntry(request.materialId(), request.quantity());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/materials/{materialId}/initialize")
     @Operation(summary = "Inicializar estoque de um material novo",
             description = "Chamado pelo repair-service quando um material novo é cadastrado no catálogo.")
