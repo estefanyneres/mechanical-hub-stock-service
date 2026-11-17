@@ -26,6 +26,17 @@ Este serviço **não tem acesso** às entidades de `ServiceOrder`/`Material`/`Or
 **Publica:** `estoque.reabastecido`
 **Não consome eventos do Saga** — toda interação é via REST síncrono, chamado pelo repair-service
 
+**Diagrama do fluxo** (quem fala com quem):
+
+```mermaid
+flowchart LR
+    O["core-service<br/>(orquestrador)"] <-->|eventos do Saga| MQ(("RabbitMQ<br/>saga.exchange"))
+    MQ <--> B["billing-service<br/>orçamento + pagamento"]
+    MQ <--> R["repair-service<br/>material + tarefas"]
+    MQ <--> S["stock-service<br/>estoque"]
+    R <-.REST síncrono.-> S
+```
+
 ## Tecnologias
 
 - Java 21 / Spring Boot 3.2
