@@ -2,6 +2,10 @@
 
 Microsserviço de **controle de estoque** do Mechanical Hub (Fase 4 — Tech Challenge). Dono da reserva/baixa/entrada de materiais, chamado de forma **síncrona** pelo [`repair-service`](https://github.com/estefanyneres/mechanical-hub-repair-service) e participante do Saga Pattern orquestrado pelo [`core-service`](https://github.com/estefanyneres/mechanical-hub-core-service).
 
+## Diagrama de infraestrutura
+
+![Infraestrutura AWS - Fase 4](docs/desenhos/mechanical-hub-infraestrutura-fase-04.jpg)
+
 ## Arquitetura
 
 Clean Architecture (`domain` / `application` / `infrastructure`):
